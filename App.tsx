@@ -5,15 +5,27 @@ import * as Font from "expo-font";
 import { Ionicons } from "@expo/vector-icons";
 import { Asset } from "expo-asset";
 
+const loadFonts = (fonts: any[]) => fonts.map((font) => Font.loadAsync(font));
+
+const loadImages = (images: any[]) =>
+  images.map((image) => {
+    if (typeof image === "string") {
+      return Image.prefetch(image);
+    } else {
+      return Asset.loadAsync(image);
+    }
+  });
+
 export default function App() {
   const [ready, setReady] = useState(false);
   const onFinish = () => setReady(true);
   const startLoading = async () => {
-    await Font.loadAsync(Ionicons.font);
-    await Asset.loadAsync(require("./photo.jpeg"));
-    await Image.prefetch(
-      "https://d33wubrfki0l68.cloudfront.net/4245a6b338cc1b008aa1265c213c1e75be207801/2eaf7/img/oss_logo.svg"
-    );
+    const fonts = loadFonts([Ionicons.font]);
+    const images = loadImages([
+      require("./photo.jpeg"),
+      "https://d1telmomo28umc.cloudfront.net/media/public/avatars/newbie-1653629365.jpg",
+    ]);
+    await Promise.all([...fonts, ...images]);
   };
   if (!ready) {
     return (
