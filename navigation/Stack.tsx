@@ -1,6 +1,6 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { Pressable, Text, View } from "react-native";
+import { Pressable, Text } from "react-native";
 
 const ScreenOne = ({ navigation: { navigate } }: any) => (
   <Pressable onPress={() => navigate("Two")}>
@@ -22,10 +22,16 @@ const NativeStack = createNativeStackNavigator();
 
 export default function Stack() {
   return (
-    <NativeStack.Navigator>
+    <NativeStack.Navigator
+      screenOptions={{ headerTintColor: "green", animation: "flip" }}
+    >
       <NativeStack.Screen name="One" component={ScreenOne} />
       <NativeStack.Screen name="Two" component={ScreenTwo} />
-      <NativeStack.Screen name="Three" component={ScreenThree} />
+      <NativeStack.Screen
+        name="Three"
+        component={ScreenThree}
+        options={{ presentation: "modal" }}
+      />
     </NativeStack.Navigator>
   );
 }
