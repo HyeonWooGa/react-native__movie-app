@@ -1,20 +1,28 @@
 import React from "react";
 import { Text, Pressable } from "react-native";
+import styled from "styled-components/native";
+
+const Btn = styled.Pressable`
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+`;
+
+const Title = styled.Text`
+  color: blue;
+`;
 
 export default function Movie({ navigation: { navigate } }: any) {
   return (
-    <Pressable
+    <Btn
       onPress={() => navigate("Stack", { screen: "Three" })}
       style={({ pressed }) => [
         {
-          flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
           opacity: pressed ? 0.3 : 1.0,
         },
       ]}
     >
-      <Text>Movie</Text>
-    </Pressable>
+      <Title>Movie</Title>
+    </Btn>
   );
 }
