@@ -13,6 +13,7 @@ export default function Tabs() {
 
   return (
     <Tab.Navigator
+      sceneContainerStyle={{ backgroundColor: isDark ? "black" : "white" }}
       screenOptions={{
         tabBarStyle: {
           backgroundColor: isDark ? "black" : "white",
