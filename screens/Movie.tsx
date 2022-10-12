@@ -1,6 +1,6 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, Dimensions } from "react-native";
+import { ActivityIndicator, Dimensions, StyleSheet } from "react-native";
 import styled from "styled-components/native";
 import Swiper from "react-native-web-swiper";
 import { makeImgPath } from "../utils";
@@ -23,11 +23,7 @@ const Loader = styled.View`
   align-items: center;
 `;
 
-const BgImg = styled.Image`
-  width: 100%;
-  height: 100%;
-  position: absolute;
-`;
+const BgImg = styled.Image``;
 
 const Title = styled.Text``;
 
@@ -62,11 +58,11 @@ export default function Movie() {
       >
         {nowPlaying.map((movie: movie) => (
           <View key={movie.id}>
-            <BgImg source={{ uri: makeImgPath(movie.backdrop_path) }} />
-            <BlurView
-              intensity={80}
-              style={{ width: "100%", height: "100%", position: "absolute" }}
-            >
+            <BgImg
+              source={{ uri: makeImgPath(movie.backdrop_path) }}
+              style={StyleSheet.absoluteFill}
+            />
+            <BlurView intensity={80} style={StyleSheet.absoluteFill}>
               <Title>{movie.original_title}</Title>
             </BlurView>
           </View>
