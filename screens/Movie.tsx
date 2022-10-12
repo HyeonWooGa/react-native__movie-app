@@ -5,6 +5,7 @@ import styled from "styled-components/native";
 import Swiper from "react-native-web-swiper";
 import { makeImgPath } from "../utils";
 import { movie } from "../interfaces";
+import { BlurView } from "expo-blur";
 
 const API_KEY = "b9a221486250d0601edc387fbf688741";
 
@@ -23,8 +24,12 @@ const Loader = styled.View`
 `;
 
 const BgImg = styled.Image`
-  flex: 1;
+  width: 100%;
+  height: 100%;
+  position: absolute;
 `;
+
+const Title = styled.Text``;
 
 const { height: SCREEN_HEIGHT } = Dimensions.get("window");
 
@@ -58,6 +63,12 @@ export default function Movie() {
         {nowPlaying.map((movie: movie) => (
           <View key={movie.id}>
             <BgImg source={{ uri: makeImgPath(movie.backdrop_path) }} />
+            <BlurView
+              intensity={80}
+              style={{ width: "100%", height: "100%", position: "absolute" }}
+            >
+              <Title>{movie.original_title}</Title>
+            </BlurView>
           </View>
         ))}
       </Swiper>
