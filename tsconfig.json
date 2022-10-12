@@ -5,13 +5,8 @@
     "esModuleInterop": true,
     "isolatedModules": true,
     "jsx": "react-native",
-    "lib": [
-      "es2017"
-    ],
-    "types": [
-      "react-native",
-      "jest"
-    ],
+    "lib": ["es2017"],
+    "types": ["react-native", "jest", "styled-components-react-native"],
     "moduleResolution": "node",
     "noEmit": true,
     "strict": true,
