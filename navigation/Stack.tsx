@@ -12,9 +12,9 @@ const ScreenTwo = ({ navigation: { navigate } }: any) => (
     <Text>Go To Three</Text>
   </Pressable>
 );
-const ScreenThree = ({ navigation: { setOptions } }: any) => (
-  <Pressable onPress={() => setOptions({ title: "Hello World" })}>
-    <Text>Change Title</Text>
+const ScreenThree = ({ navigation: { navigate } }: any) => (
+  <Pressable onPress={() => navigate("Tabs", { screen: "Search" })}>
+    <Text>Go to Search</Text>
   </Pressable>
 );
 
@@ -22,16 +22,10 @@ const NativeStack = createNativeStackNavigator();
 
 export default function Stack() {
   return (
-    <NativeStack.Navigator
-      screenOptions={{ headerTintColor: "green", animation: "flip" }}
-    >
+    <NativeStack.Navigator screenOptions={{ headerTintColor: "green" }}>
       <NativeStack.Screen name="One" component={ScreenOne} />
       <NativeStack.Screen name="Two" component={ScreenTwo} />
-      <NativeStack.Screen
-        name="Three"
-        component={ScreenThree}
-        options={{ presentation: "modal" }}
-      />
+      <NativeStack.Screen name="Three" component={ScreenThree} />
     </NativeStack.Navigator>
   );
 }

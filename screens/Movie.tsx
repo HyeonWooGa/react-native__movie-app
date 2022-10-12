@@ -1,10 +1,20 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { Text, Pressable } from "react-native";
 
-export default function Movie() {
+export default function Movie({ navigation: { navigate } }: any) {
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+    <Pressable
+      onPress={() => navigate("Stack", { screen: "Three" })}
+      style={({ pressed }) => [
+        {
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+          opacity: pressed ? 0.3 : 1.0,
+        },
+      ]}
+    >
       <Text>Movie</Text>
-    </View>
+    </Pressable>
   );
 }
