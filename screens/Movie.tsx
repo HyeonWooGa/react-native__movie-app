@@ -1,8 +1,13 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, Dimensions, StyleSheet } from "react-native";
+import {
+  ActivityIndicator,
+  Dimensions,
+  StyleSheet,
+  useColorScheme,
+} from "react-native";
 import styled from "styled-components/native";
-import Swiper from "react-native-web-swiper";
+import Swiper from "react-native-swiper";
 import { makeImgPath } from "../utils";
 import { movie } from "../interfaces";
 import { BlurView } from "expo-blur";
@@ -11,6 +16,18 @@ const API_KEY = "b9a221486250d0601edc387fbf688741";
 
 const Container = styled.ScrollView`
   background-color: ${(props) => props.theme.mainBgColor};
+`;
+
+const Wrapper = styled.View`
+  flex-direction: row;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+`;
+
+const Column = styled.View`
+  width: 40%;
+  margin-left: 15px;
 `;
 
 const View = styled.View`
@@ -25,11 +42,31 @@ const Loader = styled.View`
 
 const BgImg = styled.Image``;
 
-const Title = styled.Text``;
+const Title = styled.Text`
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+`;
+
+const Poster = styled.Image`
+  width: 100px;
+  height: 160px;
+  border-radius: 5px;
+`;
+
+const Overview = styled.Text`
+  margin-top: 10px;
+  color: rgba(255, 255, 255, 0.6);
+`;
+
+const Average = styled(Overview)`
+  font-size: 12px;
+`;
 
 const { height: SCREEN_HEIGHT } = Dimensions.get("window");
 
 export default function Movie() {
+  const isDark = useColorScheme() === "dark";
   const [loading, setLoading] = useState(true);
   const [nowPlaying, setNowPlaying] = useState([]);
   const getNowPlaying = async () => {
@@ -51,9 +88,12 @@ export default function Movie() {
   ) : (
     <Container>
       <Swiper
+        horizontal
         loop
-        timeout={3.5}
-        controlsEnabled={false}
+        autoplay
+        autoplayTimeout={3.5}
+        showsButtons={false}
+        showsPagination={false}
         containerStyle={{ width: "100%", height: SCREEN_HEIGHT / 4 }}
       >
         {nowPlaying.map((movie: movie) => (
@@ -62,8 +102,21 @@ export default function Movie() {
               source={{ uri: makeImgPath(movie.backdrop_path) }}
               style={StyleSheet.absoluteFill}
             />
-            <BlurView intensity={80} style={StyleSheet.absoluteFill}>
-              <Title>{movie.original_title}</Title>
+            <BlurView
+              tint={isDark ? "dark" : "default"}
+              intensity={20}
+              style={StyleSheet.absoluteFill}
+            >
+              <Wrapper>
+                <Poster source={{ uri: makeImgPath(movie.poster_path) }} />
+                <Column>
+                  <Title>{movie.original_title}</Title>
+                  {movie.vote_average ? (
+                    <Average>⭐️{movie.vote_average}/10</Average>
+                  ) : null}
+                  <Overview>{movie.overview.substring(0, 80)}...</Overview>
+                </Column>
+              </Wrapper>
             </BlurView>
           </View>
         ))}
