@@ -4,5 +4,13 @@ export interface movie {
   original_title: string;
   poster_path: string;
   overview: string;
-  vote_average: string;
+  vote_average: number;
+}
+
+export interface SlideProps {
+  backdrop_path: string;
+  original_title: string;
+  poster_path: string;
+  overview: string;
+  vote_average: number;
 }

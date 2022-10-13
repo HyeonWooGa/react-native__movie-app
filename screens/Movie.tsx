@@ -1,37 +1,14 @@
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React, { useEffect, useState } from "react";
-import {
-  ActivityIndicator,
-  Dimensions,
-  StyleSheet,
-  useColorScheme,
-} from "react-native";
+import { ActivityIndicator, Dimensions } from "react-native";
 import styled from "styled-components/native";
 import Swiper from "react-native-swiper";
-import { makeImgPath } from "../utils";
 import { movie } from "../interfaces";
-import { BlurView } from "expo-blur";
+import Slide from "../components/Slide";
 
 const API_KEY = "b9a221486250d0601edc387fbf688741";
 
 const Container = styled.ScrollView`
   background-color: ${(props) => props.theme.mainBgColor};
-`;
-
-const Wrapper = styled.View`
-  flex-direction: row;
-  height: 100%;
-  justify-content: center;
-  align-items: center;
-`;
-
-const Column = styled.View`
-  width: 40%;
-  margin-left: 15px;
-`;
-
-const View = styled.View`
-  flex: 1;
 `;
 
 const Loader = styled.View`
@@ -40,34 +17,9 @@ const Loader = styled.View`
   align-items: center;
 `;
 
-const BgImg = styled.Image``;
-
-const Title = styled.Text`
-  font-size: 16px;
-  font-weight: 600;
-  color: ${(props) => props.theme.textColor};
-`;
-
-const Poster = styled.Image`
-  width: 100px;
-  height: 160px;
-  border-radius: 5px;
-`;
-
-const Overview = styled.Text<{ isDark: boolean }>`
-  margin-top: 10px;
-  color: ${(props) =>
-    props.isDark ? "rgba(255,255,255,0.6)" : "rgba(0,0,0,0.6)"};
-`;
-
-const Average = styled(Overview)`
-  font-size: 12px;
-`;
-
 const { height: SCREEN_HEIGHT } = Dimensions.get("window");
 
 export default function Movie() {
-  const isDark = useColorScheme() === "dark";
   const [loading, setLoading] = useState(true);
   const [nowPlaying, setNowPlaying] = useState([]);
   const getNowPlaying = async () => {
@@ -98,32 +50,14 @@ export default function Movie() {
         containerStyle={{ width: "100%", height: SCREEN_HEIGHT / 4 }}
       >
         {nowPlaying.map((movie: movie) => (
-          <View key={movie.id}>
-            <BgImg
-              source={{ uri: makeImgPath(movie.backdrop_path) }}
-              style={StyleSheet.absoluteFill}
-            />
-            <BlurView
-              tint={isDark ? "dark" : "light"}
-              intensity={20}
-              style={StyleSheet.absoluteFill}
-            >
-              <Wrapper>
-                <Poster source={{ uri: makeImgPath(movie.poster_path) }} />
-                <Column>
-                  <Title>{movie.original_title}</Title>
-                  {movie.vote_average ? (
-                    <Average isDark={isDark}>
-                      ⭐️{movie.vote_average}/10
-                    </Average>
-                  ) : null}
-                  <Overview isDark={isDark}>
-                    {movie.overview.substring(0, 80)}...
-                  </Overview>
-                </Column>
-              </Wrapper>
-            </BlurView>
-          </View>
+          <Slide
+            key={movie.id}
+            backdrop_path={movie.backdrop_path}
+            original_title={movie.original_title}
+            poster_path={movie.poster_path}
+            overview={movie.overview}
+            vote_average={movie.vote_average}
+          />
         ))}
       </Swiper>
     </Container>
