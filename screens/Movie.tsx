@@ -35,7 +35,7 @@ export default function Movie() {
   const getUpcoming = async () => {
     const { results } = await (
       await fetch(
-        `https://api.themoviedb.org/3/movie/upcoming?api_key=${API_KEY}&language=en-US&page=1&region=kr-KR`
+        `https://api.themoviedb.org/3/movie/upcoming?api_key=${API_KEY}&language=en-US&page=1&region=KR`
       )
     ).json();
     setUpComing(results);
