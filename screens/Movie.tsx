@@ -45,7 +45,7 @@ const BgImg = styled.Image``;
 const Title = styled.Text`
   font-size: 16px;
   font-weight: 600;
-  color: white;
+  color: ${(props) => props.theme.textColor};
 `;
 
 const Poster = styled.Image`
@@ -54,9 +54,10 @@ const Poster = styled.Image`
   border-radius: 5px;
 `;
 
-const Overview = styled.Text`
+const Overview = styled.Text<{ isDark: boolean }>`
   margin-top: 10px;
-  color: rgba(255, 255, 255, 0.6);
+  color: ${(props) =>
+    props.isDark ? "rgba(255,255,255,0.6)" : "rgba(0,0,0,0.6)"};
 `;
 
 const Average = styled(Overview)`
@@ -103,7 +104,7 @@ export default function Movie() {
               style={StyleSheet.absoluteFill}
             />
             <BlurView
-              tint={isDark ? "dark" : "default"}
+              tint={isDark ? "dark" : "light"}
               intensity={20}
               style={StyleSheet.absoluteFill}
             >
@@ -112,9 +113,13 @@ export default function Movie() {
                 <Column>
                   <Title>{movie.original_title}</Title>
                   {movie.vote_average ? (
-                    <Average>⭐️{movie.vote_average}/10</Average>
+                    <Average isDark={isDark}>
+                      ⭐️{movie.vote_average}/10
+                    </Average>
                   ) : null}
-                  <Overview>{movie.overview.substring(0, 80)}...</Overview>
+                  <Overview isDark={isDark}>
+                    {movie.overview.substring(0, 80)}...
+                  </Overview>
                 </Column>
               </Wrapper>
             </BlurView>
