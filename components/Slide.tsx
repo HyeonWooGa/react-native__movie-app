@@ -30,10 +30,9 @@ const Title = styled.Text`
   color: ${(props) => props.theme.textColor};
 `;
 
-const Overview = styled.Text<{ isDark: boolean }>`
+const Overview = styled.Text`
   margin-top: 10px;
-  color: ${(props) =>
-    props.isDark ? "rgba(255,255,255,0.6)" : "rgba(0,0,0,0.6)"};
+  color: ${(props) => props.theme.textColorOpacity};
 `;
 
 const Average = styled(Overview)`

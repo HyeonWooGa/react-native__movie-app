@@ -5,6 +5,7 @@ export interface movie {
   poster_path: string;
   overview: string;
   vote_average: number;
+  release_date: string;
 }
 
 export interface SlideProps {
