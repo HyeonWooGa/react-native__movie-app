@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, Dimensions } from "react-native";
+import { ActivityIndicator, Dimensions, ScrollView } from "react-native";
 import styled from "styled-components/native";
 import Swiper from "react-native-swiper";
 import { movie } from "../interfaces";
 import Slide from "../components/Slide";
+import Poster from "../components/Poster";
 
 const API_KEY = "b9a221486250d0601edc387fbf688741";
 
@@ -15,6 +16,35 @@ const Loader = styled.View`
   flex: 1;
   justify-content: center;
   align-items: center;
+`;
+
+const ListTitle = styled.Text`
+  font-size: 18px;
+  font-weight: 600;
+  margin-left: 30px;
+  color: ${(props) => props.theme.textColor};
+`;
+
+const ScrollTrending = styled.ScrollView`
+  margin-top: 20px;
+`;
+
+const MovieTrending = styled.View`
+  margin-right: 20px;
+  align-items: center;
+`;
+
+const Title = styled.Text`
+  font-size: 13px;
+  font-weight: 600;
+  margin-top: 7px;
+  margin-bottom: 5px;
+  color: ${(props) => props.theme.textColor};
+`;
+
+const Average = styled.Text`
+  color: ${(props) => props.theme.textColorOpacity};
+  font-size: 12px;
 `;
 
 const { height: SCREEN_HEIGHT } = Dimensions.get("window");
@@ -68,7 +98,11 @@ export default function Movie() {
         autoplayTimeout={3.5}
         showsButtons={false}
         showsPagination={false}
-        containerStyle={{ width: "100%", height: SCREEN_HEIGHT / 4 }}
+        containerStyle={{
+          marginBottom: 30,
+          width: "100%",
+          height: SCREEN_HEIGHT / 4,
+        }}
       >
         {nowPlaying.map((movie: movie) => (
           <Slide
@@ -81,6 +115,23 @@ export default function Movie() {
           />
         ))}
       </Swiper>
+      <ListTitle>Trending Movies</ListTitle>
+      <ScrollTrending
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={{ paddingLeft: 10 }}
+      >
+        {trending.map((movie: movie) => (
+          <MovieTrending key={movie.id}>
+            <Poster poster_path={movie.poster_path} />
+            <Title>
+              {movie.original_title.slice(0, 13)}
+              {movie.original_title.length > 13 ? "..." : null}
+            </Title>
+            <Average>⭐️{movie.vote_average.toFixed(1)}/10</Average>
+          </MovieTrending>
+        ))}
+      </ScrollTrending>
     </Container>
   );
 }
