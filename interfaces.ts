@@ -19,3 +19,17 @@ export interface SlideProps {
 export interface PosterProps {
   poster_path: string;
 }
+
+export interface HMediaProps {
+  poster_path: string;
+  original_title: string;
+  overview: string;
+  release_date?: string;
+  vote_average?: number;
+}
+
+export interface VMediaProps {
+  poster_path: string;
+  original_title: string;
+  vote_average: number;
+}
