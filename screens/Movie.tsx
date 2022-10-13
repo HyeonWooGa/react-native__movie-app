@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, Dimensions, ScrollView } from "react-native";
+import {
+  ActivityIndicator,
+  Dimensions,
+  RefreshControl,
+  ScrollView,
+} from "react-native";
 import styled from "styled-components/native";
 import Swiper from "react-native-swiper";
 import { movie } from "../interfaces";
@@ -80,6 +85,7 @@ const Release = styled.Text`
 const { height: SCREEN_HEIGHT } = Dimensions.get("window");
 
 export default function Movie() {
+  const [refreshing, setRefreshing] = useState(false);
   const [loading, setLoading] = useState(true);
   const [nowPlaying, setNowPlaying] = useState([]);
   const [upComing, setUpComing] = useState([]);
@@ -112,6 +118,11 @@ export default function Movie() {
     await Promise.all([getTrending(), getUpcoming(), getNowPlaying()]);
     setLoading(false);
   };
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await getData();
+    setRefreshing(false);
+  };
   useEffect(() => {
     getData();
   }, []);
@@ -120,7 +131,11 @@ export default function Movie() {
       <ActivityIndicator />
     </Loader>
   ) : (
-    <Container>
+    <Container
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+    >
       <Swiper
         horizontal
         loop
