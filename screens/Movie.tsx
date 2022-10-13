@@ -43,8 +43,8 @@ const Title = styled.Text`
 `;
 
 const Average = styled.Text`
-  color: ${(props) => props.theme.textColorOpacity};
   font-size: 12px;
+  color: ${(props) => props.theme.textColorOpacity};
 `;
 
 const { height: SCREEN_HEIGHT } = Dimensions.get("window");
@@ -119,7 +119,7 @@ export default function Movie() {
       <ScrollTrending
         horizontal
         showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{ paddingLeft: 10 }}
+        contentContainerStyle={{ paddingLeft: 30 }}
       >
         {trending.map((movie: movie) => (
           <MovieTrending key={movie.id}>
