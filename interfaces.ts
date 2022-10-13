@@ -14,3 +14,7 @@ export interface SlideProps {
   overview: string;
   vote_average: number;
 }
+
+export interface PosterProps {
+  poster_path: string;
+}

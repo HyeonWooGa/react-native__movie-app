@@ -4,6 +4,7 @@ import styled from "styled-components/native";
 import { SlideProps } from "../interfaces";
 import { makeImgPath } from "../utils";
 import { BlurView } from "expo-blur";
+import Poster from "./Poster";
 
 const Wrapper = styled.View`
   flex-direction: row;
@@ -27,12 +28,6 @@ const Title = styled.Text`
   font-size: 16px;
   font-weight: 600;
   color: ${(props) => props.theme.textColor};
-`;
-
-const Poster = styled.Image`
-  width: 100px;
-  height: 160px;
-  border-radius: 5px;
 `;
 
 const Overview = styled.Text<{ isDark: boolean }>`
@@ -66,7 +61,7 @@ const Slide: React.FC<SlideProps> = ({
         style={StyleSheet.absoluteFill}
       >
         <Wrapper>
-          <Poster source={{ uri: makeImgPath(poster_path) }} />
+          <Poster poster_path={poster_path} />
           <Column>
             <Title>{original_title}</Title>
             {vote_average ? (
