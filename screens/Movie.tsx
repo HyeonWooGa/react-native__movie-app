@@ -8,7 +8,7 @@ import { moviesApi } from "../api";
 import HMedia from "../components/HMedia";
 import Slide from "../components/Slide";
 import VMedia from "../components/VMedia";
-import { movie } from "../interfaces";
+import { Movie, movie, MovieResponse } from "../interfaces";
 
 const Container = styled.FlatList``;
 
@@ -50,37 +50,37 @@ const Movies: React.FC<NativeStackScreenProps<any, "Movies">> = () => {
     data: nowPlayingData,
     isLoading: isLoadingNowPlaying,
     isRefetching: isRefetchingNowPlaying,
-  } = useQuery(["movies", "nowPlaying"], moviesApi.nowPlaying);
+  } = useQuery<MovieResponse>(["movies", "nowPlaying"], moviesApi.nowPlaying);
   const {
     data: upcomingData,
     isLoading: isLoadingUpcoming,
     isRefetching: isRefetchingUpcoming,
-  } = useQuery(["movies", "upcoming"], moviesApi.upcoming);
+  } = useQuery<MovieResponse>(["movies", "upcoming"], moviesApi.upcoming);
   const {
     data: trendingData,
     isLoading: isLoadingTrending,
     isRefetching: isRefetchingTrending,
-  } = useQuery(["movies", "trending"], moviesApi.trending);
+  } = useQuery<MovieResponse>(["movies", "trending"], moviesApi.trending);
   const onRefresh = async () => {
     queryClient.refetchQueries(["movies"]);
   };
-  const renderVMedia = ({ item }) => (
+  const renderVMedia = ({ item }: { item: Movie }) => (
     <VMedia
       key={item.id}
-      poster_path={item.poster_path}
+      poster_path={item.poster_path || ""}
       original_title={item.original_title}
       vote_average={item.vote_average}
     />
   );
-  const renderHMedia = ({ item }) => (
+  const renderHMedia = ({ item }: { item: Movie }) => (
     <HMedia
-      poster_path={item.poster_path}
+      poster_path={item.poster_path || ""}
       original_title={item.original_title}
       overview={item.overview}
       release_date={item.release_date}
     />
   );
-  const movieKeyExtractor = (item) => item.id + "";
+  const movieKeyExtractor = (item: Movie) => item.id + "";
   const loading = isLoadingNowPlaying || isLoadingUpcoming || isLoadingTrending;
   const refreshing =
     isRefetchingNowPlaying || isRefetchingUpcoming || isRefetchingTrending;
@@ -107,34 +107,40 @@ const Movies: React.FC<NativeStackScreenProps<any, "Movies">> = () => {
               height: SCREEN_HEIGHT / 4,
             }}
           >
-            {nowPlayingData.results.map((movie: movie) => (
-              <Slide
-                key={movie.id}
-                backdrop_path={movie.backdrop_path}
-                poster_path={movie.poster_path}
-                original_title={movie.original_title}
-                vote_average={movie.vote_average}
-                overview={movie.overview}
-              />
-            ))}
+            {nowPlayingData
+              ? nowPlayingData.results.map((movie) => (
+                  <Slide
+                    key={movie.id}
+                    backdrop_path={movie.backdrop_path || ""}
+                    poster_path={movie.poster_path || ""}
+                    original_title={movie.original_title}
+                    vote_average={movie.vote_average}
+                    overview={movie.overview}
+                  />
+                ))
+              : null}
           </Swiper>
           <ListTitle>Trending Movies</ListTitle>
-          <TrendingScroll
-            data={trendingData.results}
-            horizontal
-            keyExtractor={movieKeyExtractor}
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={{ paddingLeft: 30 }}
-            ItemSeparatorComponent={VSeparator}
-            renderItem={renderVMedia}
-          />
+          {trendingData ? (
+            <TrendingScroll
+              data={trendingData.results}
+              horizontal
+              keyExtractor={movieKeyExtractor}
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{ paddingLeft: 30 }}
+              ItemSeparatorComponent={VSeparator}
+              renderItem={renderVMedia}
+            />
+          ) : null}
           <ComingSoonTitle>Coming soon</ComingSoonTitle>
-          <TrendingScroll
-            data={upcomingData.results}
-            keyExtractor={movieKeyExtractor}
-            ItemSeparatorComponent={HSeparator}
-            renderItem={renderHMedia}
-          />
+          {upcomingData ? (
+            <TrendingScroll
+              data={upcomingData.results}
+              keyExtractor={movieKeyExtractor}
+              ItemSeparatorComponent={HSeparator}
+              renderItem={renderHMedia}
+            />
+          ) : null}
         </>
       }
     />
