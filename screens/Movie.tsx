@@ -1,21 +1,14 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import React, { useEffect, useState } from "react";
-import {
-  ActivityIndicator,
-  Dimensions,
-  FlatList,
-  RefreshControl,
-  Text,
-  View,
-} from "react-native";
+import { useQuery } from "@tanstack/react-query";
+import React, { useState } from "react";
+import { ActivityIndicator, Dimensions } from "react-native";
 import Swiper from "react-native-swiper";
 import styled from "styled-components/native";
+import { moviesApi } from "../api";
 import HMedia from "../components/HMedia";
 import Slide from "../components/Slide";
 import VMedia from "../components/VMedia";
 import { movie } from "../interfaces";
-
-const API_KEY = "10923b261ba94d897ac6b81148314a3f";
 
 const Container = styled.FlatList``;
 
@@ -53,46 +46,19 @@ const HSeparator = styled.View`
 
 const Movies: React.FC<NativeStackScreenProps<any, "Movies">> = () => {
   const [refreshing, setRefreshing] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [nowPlaying, setNowPlaying] = useState([]);
-  const [upcoming, setUpcoming] = useState([]);
-  const [trending, setTrending] = useState([]);
-  const getTrending = async () => {
-    const { results } = await (
-      await fetch(
-        `https://api.themoviedb.org/3/trending/movie/week?api_key=${API_KEY}`
-      )
-    ).json();
-    setTrending(results);
-  };
-  const getUpcoming = async () => {
-    const { results } = await (
-      await fetch(
-        `https://api.themoviedb.org/3/movie/upcoming?api_key=${API_KEY}&language=en-US&page=1`
-      )
-    ).json();
-    setUpcoming(results);
-  };
-  const getNowPlaying = async () => {
-    const { results } = await (
-      await fetch(
-        `https://api.themoviedb.org/3/movie/now_playing?api_key=${API_KEY}&language=en-US&page=1`
-      )
-    ).json();
-    setNowPlaying(results);
-  };
-  const getData = async () => {
-    await Promise.all([getTrending(), getUpcoming(), getNowPlaying()]);
-    setLoading(false);
-  };
-  useEffect(() => {
-    getData();
-  }, []);
-  const onRefresh = async () => {
-    setRefreshing(true);
-    await getData();
-    setRefreshing(false);
-  };
+  const { isLoading: nowPlayingLoading, data: nowPlayingData } = useQuery(
+    ["nowPlaying"],
+    moviesApi.nowPlaying
+  );
+  const { isLoading: upcomingLoading, data: upcomingData } = useQuery(
+    ["upcoming"],
+    moviesApi.upcoming
+  );
+  const { isLoading: trendingLoading, data: trendingData } = useQuery(
+    ["trending"],
+    moviesApi.trending
+  );
+  const onRefresh = async () => {};
   const renderVMedia = ({ item }) => (
     <VMedia
       key={item.id}
@@ -110,6 +76,7 @@ const Movies: React.FC<NativeStackScreenProps<any, "Movies">> = () => {
     />
   );
   const movieKeyExtractor = (item) => item.id + "";
+  const loading = nowPlayingLoading || upcomingLoading || trendingLoading;
   return loading ? (
     <Loader>
       <ActivityIndicator />
@@ -133,7 +100,7 @@ const Movies: React.FC<NativeStackScreenProps<any, "Movies">> = () => {
               height: SCREEN_HEIGHT / 4,
             }}
           >
-            {nowPlaying.map((movie: movie) => (
+            {nowPlayingData.results.map((movie: movie) => (
               <Slide
                 key={movie.id}
                 backdrop_path={movie.backdrop_path}
@@ -146,7 +113,7 @@ const Movies: React.FC<NativeStackScreenProps<any, "Movies">> = () => {
           </Swiper>
           <ListTitle>Trending Movies</ListTitle>
           <TrendingScroll
-            data={trending}
+            data={trendingData.results}
             horizontal
             keyExtractor={movieKeyExtractor}
             showsHorizontalScrollIndicator={false}
@@ -156,7 +123,7 @@ const Movies: React.FC<NativeStackScreenProps<any, "Movies">> = () => {
           />
           <ComingSoonTitle>Coming soon</ComingSoonTitle>
           <TrendingScroll
-            data={upcoming}
+            data={upcomingData.results}
             keyExtractor={movieKeyExtractor}
             ItemSeparatorComponent={HSeparator}
             renderItem={renderHMedia}
