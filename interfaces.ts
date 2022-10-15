@@ -33,3 +33,7 @@ export interface VMediaProps {
   original_title: string;
   vote_average: number;
 }
+
+export interface VotesProps {
+  vote_average: number;
+}
