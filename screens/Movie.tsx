@@ -5,6 +5,7 @@ import { Dimensions } from "react-native";
 import Swiper from "react-native-swiper";
 import styled from "styled-components/native";
 import { moviesApi } from "../api";
+import HList from "../components/HList";
 import HMedia from "../components/HMedia";
 import Loader from "../components/Loader";
 import Slide from "../components/Slide";
@@ -113,17 +114,8 @@ const Movies: React.FC<NativeStackScreenProps<any, "Movies">> = () => {
                 ))
               : null}
           </Swiper>
-          <ListTitle>Trending Movies</ListTitle>
           {trendingData ? (
-            <TrendingScroll
-              data={trendingData.results}
-              horizontal
-              keyExtractor={movieKeyExtractor}
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={{ paddingLeft: 30 }}
-              ItemSeparatorComponent={VSeparator}
-              renderItem={renderVMedia}
-            />
+            <HList title="Trending Movies" data={trendingData.results} />
           ) : null}
           <ComingSoonTitle>Coming soon</ComingSoonTitle>
           {upcomingData ? (

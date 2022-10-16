@@ -54,3 +54,8 @@ export interface Movie {
   vote_average: number;
   vote_count: number;
 }
+
+export interface HListProps {
+  title: string;
+  data: any[];
+}
