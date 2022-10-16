@@ -8,7 +8,7 @@ import { moviesApi } from "../api";
 import HMedia from "../components/HMedia";
 import Slide from "../components/Slide";
 import VMedia from "../components/VMedia";
-import { Movie, movie, MovieResponse } from "../interfaces";
+import { Movie, MovieResponse } from "../interfaces";
 
 const Container = styled.FlatList``;
 
