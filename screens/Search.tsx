@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
 import styled from "styled-components/native";
 import { moviesApi, tvApi } from "../api";
+import Loader from "../components/Loader";
 
 const Container = styled.ScrollView``;
 
@@ -18,14 +19,14 @@ const SearchBar = styled.TextInput.attrs((props) => ({
 export default function Search() {
   const [query, setQuery] = useState("");
   const {
-    isLoading: isLoadingMovies,
+    isInitialLoading: isInitialLoadingMovies,
     data: moviesData,
     refetch: searchMovies,
   } = useQuery(["searchMovies", query], moviesApi.search, {
     enabled: false,
   });
   const {
-    isLoading: isLoadingTv,
+    isInitialLoading: isInitialLoadingTv,
     data: tvData,
     refetch: searchTv,
   } = useQuery(["searchMovies", query], tvApi.search, {
@@ -43,7 +44,7 @@ export default function Search() {
     searchMovies();
     searchTv();
   };
-  console.log(isLoadingMovies, isLoadingTv);
+  console.log(isInitialLoadingMovies, isInitialLoadingTv);
   return (
     <Container>
       <SearchBar
