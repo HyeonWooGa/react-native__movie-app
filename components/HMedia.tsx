@@ -1,4 +1,6 @@
+import { useNavigation } from "@react-navigation/native";
 import React from "react";
+import { Pressable } from "react-native";
 import styled from "styled-components/native";
 import { HMediaProps } from "../interfaces";
 import Poster from "./Poster";
@@ -40,32 +42,43 @@ const HMedia: React.FC<HMediaProps> = ({
   release_date,
   vote_average,
 }) => {
+  const navigation = useNavigation();
+
+  const goToDetail = () => {
+    navigation.navigate("Stack", { screen: "Detail" });
+  };
+
   return (
-    <HMovie>
-      <Poster poster_path={poster_path} />
-      <HColumn>
-        <Title>
-          {original_title.length > 30
-            ? `${original_title.slice(0, 30)}...`
-            : original_title}
-        </Title>
-        {release_date ? (
-          <Release>
-            {new Date(release_date).toLocaleDateString("ko", {
-              month: "long",
-              day: "numeric",
-              year: "numeric",
-            })}
-          </Release>
-        ) : null}
-        {vote_average ? <Votes vote_average={vote_average} /> : null}
-        <Overview>
-          {!overview || overview.length > 140
-            ? `${overview.slice(0, 140)}...`
-            : overview}
-        </Overview>
-      </HColumn>
-    </HMovie>
+    <Pressable
+      onPress={goToDetail}
+      style={({ pressed }) => [{ opacity: pressed ? 0.3 : 1 }]}
+    >
+      <HMovie>
+        <Poster poster_path={poster_path} />
+        <HColumn>
+          <Title>
+            {original_title.length > 30
+              ? `${original_title.slice(0, 30)}...`
+              : original_title}
+          </Title>
+          {release_date ? (
+            <Release>
+              {new Date(release_date).toLocaleDateString("ko", {
+                month: "long",
+                day: "numeric",
+                year: "numeric",
+              })}
+            </Release>
+          ) : null}
+          {vote_average ? <Votes vote_average={vote_average} /> : null}
+          <Overview>
+            {!overview || overview.length > 140
+              ? `${overview.slice(0, 140)}...`
+              : overview}
+          </Overview>
+        </HColumn>
+      </HMovie>
+    </Pressable>
   );
 };
 

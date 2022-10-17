@@ -5,8 +5,9 @@ import { SlideProps } from "../interfaces";
 import { makeImgPath } from "../utils";
 import { BlurView } from "expo-blur";
 import Poster from "./Poster";
+import { useNavigation } from "@react-navigation/native";
 
-const Wrapper = styled.View`
+const Pressable = styled.Pressable`
   flex-direction: row;
   height: 100%;
   justify-content: center;
@@ -47,6 +48,11 @@ const Slide: React.FC<SlideProps> = ({
   overview,
 }) => {
   const isDark = useColorScheme() === "dark";
+  const navigation = useNavigation();
+
+  const goToDetail = () => {
+    navigation.navigate("Stack", { screen: "Detail" });
+  };
 
   return (
     <View>
@@ -59,7 +65,10 @@ const Slide: React.FC<SlideProps> = ({
         intensity={20}
         style={StyleSheet.absoluteFill}
       >
-        <Wrapper>
+        <Pressable
+          onPress={goToDetail}
+          style={({ pressed }) => [{ opacity: pressed ? 0.3 : 1 }]}
+        >
           <Poster poster_path={poster_path} />
           <Column>
             <Title>{original_title}</Title>
@@ -68,7 +77,7 @@ const Slide: React.FC<SlideProps> = ({
             ) : null}
             <Overview isDark={isDark}>{overview.substring(0, 80)}...</Overview>
           </Column>
-        </Wrapper>
+        </Pressable>
       </BlurView>
     </View>
   );
