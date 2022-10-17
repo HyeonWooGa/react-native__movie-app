@@ -29,7 +29,7 @@ export default function Search() {
     isInitialLoading: isInitialLoadingTv,
     data: tvData,
     refetch: searchTv,
-  } = useQuery(["searchMovies", query], tvApi.search, {
+  } = useQuery(["searchTv", query], tvApi.search, {
     enabled: false,
   });
 
