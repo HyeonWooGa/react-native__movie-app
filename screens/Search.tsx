@@ -1,5 +1,7 @@
+import { useQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
 import styled from "styled-components/native";
+import { moviesApi } from "../api";
 
 const Container = styled.ScrollView``;
 
@@ -15,16 +17,40 @@ const SearchBar = styled.TextInput.attrs((props) => ({
 
 export default function Search() {
   const [query, setQuery] = useState("");
+  const {
+    isLoading: isLoadingMovies,
+    data: moviesData,
+    refetch: searchMovies,
+  } = useQuery(["searchMovies", query], moviesApi.search, {
+    enabled: false,
+  });
+  const {
+    isLoading: isLoadingTv,
+    data: tvData,
+    refetch: searchTv,
+  } = useQuery(["searchMovies", query], moviesApi.search, {
+    enabled: false,
+  });
+
   const onChangeText = (text: string) => {
     setQuery(text);
   };
-  // console.log(query); // onChangeText 함수 안에 있으면 제대로 적용 안됨
+
+  const onSubmit = () => {
+    if (query === "") {
+      return;
+    }
+    searchMovies();
+    searchTv();
+  };
+
   return (
     <Container>
       <SearchBar
         placeholder="Search for Movie or TV Show"
         returnKeyType="search"
         onChangeText={onChangeText}
+        onSubmitEditing={onSubmit}
       />
     </Container>
   );
