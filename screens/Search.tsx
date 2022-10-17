@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
 import styled from "styled-components/native";
-import { moviesApi } from "../api";
+import { moviesApi, tvApi } from "../api";
 
 const Container = styled.ScrollView``;
 
@@ -28,7 +28,7 @@ export default function Search() {
     isLoading: isLoadingTv,
     data: tvData,
     refetch: searchTv,
-  } = useQuery(["searchMovies", query], moviesApi.search, {
+  } = useQuery(["searchMovies", query], tvApi.search, {
     enabled: false,
   });
 
@@ -43,7 +43,7 @@ export default function Search() {
     searchMovies();
     searchTv();
   };
-
+  console.log(isLoadingMovies, isLoadingTv);
   return (
     <Container>
       <SearchBar
