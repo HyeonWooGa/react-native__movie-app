@@ -46,6 +46,7 @@ const Slide: React.FC<SlideProps> = ({
   original_title,
   vote_average,
   overview,
+  fullData,
 }) => {
   const isDark = useColorScheme() === "dark";
   const navigation = useNavigation();
@@ -54,7 +55,7 @@ const Slide: React.FC<SlideProps> = ({
     navigation.navigate("Stack", {
       screen: "Detail",
       params: {
-        original_title,
+        ...fullData,
       },
     });
   };

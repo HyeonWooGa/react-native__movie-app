@@ -1,10 +1,12 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import React, { useEffect, useState } from "react";
-import { Text, View } from "react-native";
+import React, { useEffect } from "react";
+import { Text } from "react-native";
 import styled from "styled-components/native";
+import Poster from "../components/Poster";
+import { Movie, Tv } from "../interfaces";
 
 type RootStackParamList = {
-  Detail: { original_title: string };
+  Detail: Movie | Tv;
 };
 
 type DetailScreenProps = NativeStackScreenProps<RootStackParamList, "Detail">;
@@ -19,12 +21,15 @@ const Detail: React.FC<DetailScreenProps> = ({
 }) => {
   useEffect(() => {
     setOptions({
-      title: params.original_title ?? "No Title",
+      title:
+        "original_title" in params
+          ? params.original_title
+          : params.original_name,
     });
   }, []);
   return (
     <Container>
-      <Text>Detail</Text>
+      <Poster poster_path={params.poster_path || ""} />
     </Container>
   );
 };

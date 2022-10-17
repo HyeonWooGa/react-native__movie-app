@@ -21,6 +21,7 @@ const VMedia: React.FC<VMediaProps> = ({
   poster_path,
   original_title,
   vote_average,
+  fullData,
 }) => {
   const navigation = useNavigation();
 
@@ -28,7 +29,7 @@ const VMedia: React.FC<VMediaProps> = ({
     navigation.navigate("Stack", {
       screen: "Detail",
       params: {
-        original_title,
+        ...fullData,
       },
     });
   };

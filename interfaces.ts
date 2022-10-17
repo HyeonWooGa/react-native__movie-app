@@ -4,6 +4,7 @@ export interface SlideProps {
   poster_path: string;
   overview: string;
   vote_average: number;
+  fullData: Movie;
 }
 
 export interface PosterProps {
@@ -16,12 +17,14 @@ export interface HMediaProps {
   overview: string;
   release_date?: string;
   vote_average?: number;
+  fullData: Movie;
 }
 
 export interface VMediaProps {
   poster_path: string;
   original_title: string;
   vote_average: number;
+  fullData: Movie | Tv;
 }
 
 export interface VotesProps {
