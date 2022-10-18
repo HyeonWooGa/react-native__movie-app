@@ -6,6 +6,8 @@ import { LinearGradient } from "expo-linear-gradient";
 import Poster from "../components/Poster";
 import { Movie, Tv } from "../interfaces";
 import { makeImgPath } from "../utils";
+import { useQuery } from "@tanstack/react-query";
+import { moviesApi, tvApi } from "../api";
 
 type RootStackParamList = {
   Detail: Movie | Tv;
@@ -50,6 +52,24 @@ const Detail: React.FC<DetailScreenProps> = ({
   navigation: { setOptions },
   route: { params },
 }) => {
+  const { isInitialLoading: isInitialLoadingMovie, data: movieData } = useQuery(
+    ["movies", params.id],
+    moviesApi.detail,
+    {
+      enabled: "original_title" in params,
+    }
+  );
+
+  const { isInitialLoading: isInitialLoadingTv, data: tvData } = useQuery(
+    ["tv", params.id],
+    tvApi.detail,
+    {
+      enabled: "original_name" in params,
+    }
+  );
+
+  console.log(movieData, tvData);
+
   useEffect(() => {
     setOptions({
       title: "original_title" in params ? "Movie" : "TV",
