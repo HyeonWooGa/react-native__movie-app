@@ -23,7 +23,7 @@ export const moviesApi = {
   detail: ({ queryKey }: { queryKey: (string | number)[] }) => {
     const [_, id] = queryKey;
     return fetch(
-      `${BASE_URL}/movie/${id}?api_key=${API_KEY}&language=en-US`
+      `${BASE_URL}/movie/${id}?api_key=${API_KEY}&language=en-US&append_to_response=videos,images`
     ).then((res) => res.json());
   },
 };
@@ -49,8 +49,8 @@ export const tvApi = {
   },
   detail: ({ queryKey }: { queryKey: (string | number)[] }) => {
     const [_, id] = queryKey;
-    return fetch(`${BASE_URL}/tv/${id}?api_key=${API_KEY}&language=en-US`).then(
-      (res) => res.json()
-    );
+    return fetch(
+      `${BASE_URL}/tv/${id}?api_key=${API_KEY}&language=en-US&append_to_response=videos,images`
+    ).then((res) => res.json());
   },
 };
