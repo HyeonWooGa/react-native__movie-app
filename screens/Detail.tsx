@@ -1,6 +1,14 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React, { useEffect } from "react";
-import { Dimensions, StyleSheet, Linking } from "react-native";
+import {
+  Dimensions,
+  StyleSheet,
+  Linking,
+  Pressable,
+  useColorScheme,
+  Share,
+  Platform,
+} from "react-native";
 import styled from "styled-components/native";
 import { LinearGradient } from "expo-linear-gradient";
 import * as WebBrowser from "expo-web-browser";
@@ -71,7 +79,9 @@ const Detail: React.FC<DetailScreenProps> = ({
   navigation: { setOptions },
   route: { params },
 }) => {
+  const isDark = useColorScheme() === "dark";
   const isMovie = "original_title" in params;
+
   const { isInitialLoading, data } = useQuery(
     [isMovie ? "movies" : "tv", params.id],
     isMovie ? moviesApi.detail : tvApi.detail
@@ -83,11 +93,50 @@ const Detail: React.FC<DetailScreenProps> = ({
     });
   }, []);
 
+  useEffect(() => {
+    if (data) {
+      setOptions({
+        headerRight: () => <ShareBtn />,
+      });
+    }
+  }, [data]);
+
   const openYTLink = async (videoID: string) => {
     const baseUrl = `https://m.youtube.com/watch?v=${videoID}`;
     // await Linking.openURL(baseUrl);
     await WebBrowser.openBrowserAsync(baseUrl);
   };
+
+  const shareMedia = async () => {
+    const isAndroid = Platform.OS === "android";
+    const homepage = isMovie
+      ? `https://www.imdb.com/title/${data?.imdb_id}`
+      : data?.hompage;
+    if (isAndroid) {
+      await Share.share({
+        message: `${params.overview}\nCheck it out:${homepage}`,
+        title: isMovie ? params.original_title : params.original_name,
+      });
+    } else {
+      await Share.share({
+        message: isMovie ? params.original_title : params.original_name,
+        url: homepage,
+      });
+    }
+  };
+
+  const ShareBtn = () => (
+    <Pressable
+      onPress={shareMedia}
+      style={({ pressed }) => [{ opacity: pressed ? 0.3 : 1 }]}
+    >
+      <Ionicons
+        name="share-outline"
+        color={isDark ? "white" : "black"}
+        size={24}
+      />
+    </Pressable>
+  );
 
   return (
     <Container>
